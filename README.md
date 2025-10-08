@@ -1,115 +1,143 @@
-# 🎰 Quant Hedge Engine
+# Hedging System - Adaptive Approach
 
-**Author:** Dinko Trendafilov  
-**Language:** Python 3  
-**Version:** 1.0  
-**Focus:** Dynamic hedge optimization and exposure balancing for 1X2 betting markets  
+A sophisticated betting hedging system that automatically adapts its strategy based on market conditions (coefficient values).
 
----
+## 🎯 Features
 
-## 🧭 Project Motivation
+- **Adaptive Strategy Selection**: Automatically chooses between "High Coefficient" and "Balanced Market" strategies
+- **Risk Management**: Implements precise mathematical hedging calculations
+- **Professional Approach**: 2% discount on hedge coefficients for realistic trading
+- **Detailed Reporting**: Comprehensive simulation with full financial breakdown
 
-In professional betting and trading environments, the ability to **precisely balance exposure** determines whether a sportsbook operates with stability or chaos.  
-This project was built to **demonstrate quantitative hedge thinking** — how surplus capital can be reallocated across outcomes to maintain equilibrium and protect profit margins.  
+## 📊 How It Works
 
-It reflects the mindset of a **risk analyst or trading strategist**, using code to quantify control, precision, and foresight in decision-making.  
+### Strategy Selection Logic:
+- **High Coefficient Strategy**: When max coefficient ≥ 4 (clear favorite/underdog)
+- **Balanced Market Strategy**: When max coefficient < 4 (no clear favorite)
 
----
+### Mathematical Foundation:
+1. **Base Cash Calculation**: Determines the fundamental operating capital
+2. **Deficit Coverage**: Precisely covers payment gaps using hedge amounts
+3. **Excess Distribution**: Optimally distributes remaining funds
+4. **Result Simulation**: Calculates profit/loss for all outcomes
 
-## 🧩 Overview
+## 🚀 Installation & Usage
 
-**Quant Hedge Engine** is a precision-based Python system that simulates how a sportsbook can hedge exposure across 1X2 markets using a step-by-step quantitative model.  
+### Prerequisites
+- Python 3.6+
 
-It redistributes excess funds dynamically to minimize risk and stabilize overall portfolio variance — a realistic and explainable model for internal sportsbook risk tools or academic research on hedge optimization.
-
----
-
-## ⚙️ Example Run
-
+### Running the System
 ```bash
-🎰 HEDGING SYSTEM - PRECISE APPROACH
-============================================================
+python hedging_system.py
 
-Enter odds (1 X 2): 2.4 3.3 3.1
-Enter stakes (1 X 2): 100 80 120
-Output includes:
+Input Format
+text
 
-Input summary (bets, odds, and total exposure)
+Enter coefficients (1 X 2): 2.8 3.0 2.7
+Enter bets (1 X 2): 3000 3000 4000
 
-Main “cash” line (highest return position)
+📈 Example Output
+text
 
-Deficit calculation for weaker outcomes
+🎰 HEDGING SYSTEM - ADAPTIVE APPROACH
+================================================================================================
+📊 INPUT DATA:
+1: 3,000 lv @ 2.8 → Payout: 8,400 lv
+X: 3,000 lv @ 3.0 → Payout: 9,000 lv
+2: 4,000 lv @ 2.7 → Payout: 10,800 lv
+Total Income: 10,000 lv
 
-Exact hedge distribution using a 2% discount factor
+🎯 STRATEGY: BALANCED MARKET (3.0 < 4)
 
-Residual fund redistribution
+💰 BASE CASH:
+   Strategy: BALANCED MARKET
+   Base (2): 8,400 lv
+   Excess: 1,600 lv
 
-Final profit/loss simulation with margin per outcome
+... [Detailed calculations and results]
 
-🧮 Logic Breakdown
-Step	Description
-1	Input odds & stake distribution
-2	Identify the primary cash position (highest payout)
-3	Compute exposure deficits across other outcomes
-4	Allocate hedge funds with a 2% discount precision factor
-5	Redistribute remaining surplus proportionally
-6	Simulate final P/L and margin across all possible outcomes
+🧮 Core Algorithm
+Key Formulas:
 
-📊 Core Features
-🔹 Dynamic hedge coefficient adjustment (2% precision discount)
+    Hedge Coefficients: original_coef * 0.98
 
-🔹 Automated deficit detection & coverage
+    Base Cash: min(payouts) for balanced markets, max(payouts) for high coefficients
 
-🔹 Residual surplus redistribution logic
+    Hedge Amount: deficit / hedge_coefficient
 
-🔹 Complete financial simulation per outcome
+    Profit Calculation: final_cash + hedge_income - payout
 
-🔹 No dependencies — pure, transparent Python code
+Variables:
 
-🧠 Why It Matters
-In a betting company, hedging is not gambling — it’s engineering.
-This project demonstrates how analytical models can:
+    coef: Original coefficients [1, X, 2]
 
-Detect structural inefficiencies between odds and exposure
+    bets: Bet amounts for each outcome
 
-Redistribute liquidity to stabilize risk
+    payouts: Potential payouts (bet * coefficient)
 
-Show measurable improvement in expected margin consistency
+    hedge_coefs: Discounted coefficients for hedging
 
-It represents a quant mindset — building logic before profit, precision before luck.
+    hedge_amounts: Calculated hedge investments
 
-🚀 Future Enhancements
-Integration with real-time odds APIs
+📋 Output Sections
 
-Multi-market expansion (Asian Handicap / Over-Under)
+    Input Data Summary - Initial coefficients and bets
 
-Exposure curve visualization (Matplotlib / Plotly)
+    Strategy Selection - Adaptive approach explanation
 
-Full web dashboard (FastAPI + React) for internal trading desks
+    Base Cash Calculation - Fundamental operating capital
 
-🧰 Tech Stack
-Language: Python 3.x
+    Deficit Analysis - Coverage requirements
 
-Interface: Command Line (CLI)
+    Hedge Coverage - Precise investment calculations
 
-Dependencies: None
+    Excess Distribution - Optimal fund allocation
 
-Complexity: O(n) linear — optimized for transparency and speed
+    Final Simulation - Profit/loss for all outcomes
 
-💼 Use Case
-Designed for sportsbook analysts, risk managers, and trading teams exploring hedge optimization logic in real 1X2 environments.
+    Overall Statistics - Summary performance metrics
 
-Can also be adapted for:
+💡 Use Cases
 
-Portfolio exposure balancing
+    Sports Betting Professionals: Advanced risk management
 
-Monte Carlo hedge simulations
+    Trading Analysis: Mathematical modeling of market positions
 
-Academic demonstration of quantitative betting models
+    Educational Purposes: Understanding hedging strategies
 
-📄 License
-MIT License © 2025 — Dinko Trendafilov
+    Financial Modeling: Risk distribution techniques
 
-“A trading desk without hedge logic is a casino.
-A casino with hedge logic becomes a trading desk.”
-— Dinko Trendafilov
+🛡️ Risk Management Features
+
+    Automatic Strategy Adaptation: Responds to market conditions
+
+    Precise Deficit Coverage: Mathematical accuracy in hedging
+
+    Excess Optimization: Maximizes profit potential
+
+    Comprehensive Simulation: Tests all possible outcomes
+
+📝 License
+
+This project is for educational and professional use. Please ensure compliance with local gambling regulations.
+🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check issues page.
+⚠️ Disclaimer
+
+This system is designed for educational and professional analysis purposes. Users are responsible for complying with local laws and regulations regarding gambling and financial trading.
+
+Built with precision mathematics for professional risk management 🎯
+text
+
+
+This GitHub README provides:
+- **Professional presentation** in English
+- **Clear technical documentation**
+- **Mathematical foundation** explanation
+- **Practical usage examples**
+- **Comprehensive feature overview**
+- **Proper risk disclosures**
+- **Professional formatting** with emojis and sections
+
+The README is suitable for both technical users and betting professionals! 🚀
