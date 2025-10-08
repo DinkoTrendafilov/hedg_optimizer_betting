@@ -1,5 +1,5 @@
 # Входни данни
-print("🎰 СИСТЕМА ЗА ХЕДЖИРАНЕ - ТОЧЕН ПОДХОД")
+print("🎰 СИСТЕМА ЗА ХЕДЖИРАНЕ - АДАПТИВЕН ПОДХОД")
 print("=" * 112)
 
 coef = [float(x) for x in input("Въведете коефициенти (1 X 2): ").split()]
@@ -19,19 +19,36 @@ hedge_coefs = [coef[0] * 0.98, coef[1] * 0.98, coef[2] * 0.98]
 
 payouts = [bets[i] * coef[i] for i in range(3)]
 
-# СТЪПКА 1: Намиране на касата (най-висок коефициент)
-highest_coef_index = coef.index(max(coef))
-cash = payouts[highest_coef_index]
+# СТЪПКА 1: ИЗБОР НА СТРАТЕГИЯ
+max_coef = max(coef)
+min_payout = min(payouts)
+min_payout_index = payouts.index(min_payout)
+
+if max_coef >= 4:
+    # СТРАТЕГИЯ 1: Базирана на най-висок коефициент
+    highest_coef_index = coef.index(max_coef)
+    cash = payouts[highest_coef_index]
+    strategy_name = "ВИСОК КОЕФИЦИЕНТ"
+    base_index = highest_coef_index
+    print(f"🎯 СТРАТЕГИЯ: ВИСОК КОЕФИЦИЕНТ ({max_coef} ≥ 4)")
+else:
+    # СТРАТЕГИЯ 2: Базирана на липса на изявен фаворит
+    cash = min_payout
+    strategy_name = "ЛИПСА НА ИЗЯВЕН ФАВОРИТ"
+    base_index = min_payout_index
+    print(f"🎯 СТРАТЕГИЯ: ЛИПСА НА ИЗЯВЕН ФАВОРИТ ({max_coef} < 4)")
+
 excess = total_income - cash
 
 print(f"\n💰 ОСНОВНА КАСА:")
-print(f"   Каса ({['1', 'X', '2'][highest_coef_index]}): {cash:_.0f} лв")
+print(f"   Стратегия: {strategy_name}")
+print(f"   База ({['1', 'X', '2'][base_index]}): {cash:_.0f} лв")
 print(f"   Излишък: {excess:_.0f} лв")
 
 # СТЪПКА 2: Изчисляване на дефицитите
 deficits = []
 for i in range(3):
-    if i != highest_coef_index:
+    if i != base_index:
         deficit = payouts[i] - cash
         deficits.append((i, deficit))
 
@@ -59,7 +76,7 @@ print(f"   Оставащ излишък: {remaining_excess:_.0f} лв")
 
 if remaining_excess > 0:
     # Сума на коефициентите за двата други изхода
-    other_outcomes = [i for i in range(3) if i != highest_coef_index]
+    other_outcomes = [i for i in range(3) if i != base_index]
     sum_other_coef = hedge_coefs[other_outcomes[0]] + hedge_coefs[other_outcomes[1]]
 
     base_amount = remaining_excess / sum_other_coef
@@ -100,4 +117,5 @@ print(f"\n📈 ОБЩА СТАТИСТИКА:")
 print(f"   Приход: {total_income:_.0f} лв")
 print(f"   Хедж: {total_hedge:_.0f} лв")
 print(f"   Каса: {final_cash:_.0f} лв")
+print(f"   Стратегия: {strategy_name}")
 print("=" * 112)
