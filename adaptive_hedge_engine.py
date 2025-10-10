@@ -1,96 +1,96 @@
-# Входни данни
-print("🎰 СИСТЕМА ЗА ХЕДЖИРАНЕ - АДАПТИВЕН ПОДХОД")
+# Input data
+print("HEDGING SYSTEM - ADAPTIVE APPROACH")
 print("=" * 112)
 
-coef = [float(x) for x in input("Въведете коефициенти (1 X 2): ").split()]
-bets = [float(x) for x in input("Въведете залози (1 X 2): ").split()]
+coef = [float(x) for x in input("Enter odds (1 X 2): ").split()]
+bets = [float(x) for x in input("Enter bets (1 X 2): ").split()]
 
 total_income = sum(bets)
 
-print(f"\n📊 ВХОДНИ ДАННИ:")
-print(f"1: {bets[0]:_} лв @ {coef[0]:_} → Плащане: {bets[0] * coef[0]:_.0f} лв")
-print(f"X: {bets[1]:_} лв @ {coef[1]:_} → Плащане: {bets[1] * coef[1]:_.0f} лв")
-print(f"2: {bets[2]:_} лв @ {coef[2]:_} → Плащане: {bets[2] * coef[2]:_.0f} лв")
-print(f"Общ приход: {total_income:_} лв")
+print(f"\nINPUT DATA:")
+print(f"1: {bets[0]:_} at {coef[0]:_} → Payout: {bets[0] * coef[0]:_.0f}")
+print(f"X: {bets[1]:_} at {coef[1]:_} → Payout: {bets[1] * coef[1]:_.0f}")
+print(f"2: {bets[2]:_} at {coef[2]:_} → Payout: {bets[2] * coef[2]:_.0f}")
+print(f"Total income: {total_income:_}")
 print("=" * 112)
 
-# Хеджиращи коефициенти (2% дисконт)
+# Hedging odds (2% discount)
 hedge_coefs = [coef[0] * 0.98, coef[1] * 0.98, coef[2] * 0.98]
 
 payouts = [bets[i] * coef[i] for i in range(3)]
 
-# СТЪПКА 1: ИЗБОР НА СТРАТЕГИЯ
+# STEP 1: STRATEGY SELECTION
 max_coef = max(coef)
 min_payout = min(payouts)
 min_payout_index = payouts.index(min_payout)
 
 if max_coef >= 4:
-    # СТРАТЕГИЯ 1: Базирана на най-висок коефициент
+    # STRATEGY 1: Based on highest odds
     highest_coef_index = coef.index(max_coef)
     cash = payouts[highest_coef_index]
-    strategy_name = "ВИСОК КОЕФИЦИЕНТ"
+    strategy_name = "HIGH ODDS"
     base_index = highest_coef_index
-    print(f"🎯 СТРАТЕГИЯ: ВИСОК КОЕФИЦИЕНТ ({max_coef} ≥ 4)")
+    print(f"STRATEGY: HIGH ODDS ({max_coef} ≥ 4)")
 else:
-    # СТРАТЕГИЯ 2: Базирана на липса на изявен фаворит
+    # STRATEGY 2: Based on no clear favorite
     cash = min_payout
-    strategy_name = "ЛИПСА НА ИЗЯВЕН ФАВОРИТ"
+    strategy_name = "NO CLEAR FAVORITE"
     base_index = min_payout_index
-    print(f"🎯 СТРАТЕГИЯ: ЛИПСА НА ИЗЯВЕН ФАВОРИТ ({max_coef} < 4)")
+    print(f"STRATEGY: NO CLEAR FAVORITE ({max_coef} < 4)")
 
 excess = total_income - cash
 
-print(f"\n💰 ОСНОВНА КАСА:")
-print(f"   Стратегия: {strategy_name}")
-print(f"   База ({['1', 'X', '2'][base_index]}): {cash:_.0f} лв")
-print(f"   Излишък: {excess:_.0f} лв")
+print(f"\nBASE CASH:")
+print(f"   Strategy: {strategy_name}")
+print(f"   Base ({['1', 'X', '2'][base_index]}): {cash:_.0f}")
+print(f"   Excess: {excess:_.0f}")
 
-# СТЪПКА 2: Изчисляване на дефицитите
+# STEP 2: Calculate deficits
 deficits = []
 for i in range(3):
     if i != base_index:
         deficit = payouts[i] - cash
         deficits.append((i, deficit))
 
-print(f"\n📉 ДЕФИЦИТИ:")
+print(f"\nDEFICITS:")
 for i, deficit in deficits:
-    print(f"   {['1', 'X', '2'][i]}: {deficit:_.0f} лв")
+    print(f"   {['1', 'X', '2'][i]}: {deficit:_.0f}")
 
-# СТЪПКА 3: ПОКРИВАНЕ НА ДЕФИЦИТИТЕ С ТОЧНИ СУМИ
+# STEP 3: COVER DEFICITS WITH EXACT AMOUNTS
 hedge_amounts = [0, 0, 0]
 remaining_excess = excess
 
-print(f"\n🛡️ ПОКРИВАНЕ НА ДЕФИЦИТИТЕ:")
+print(f"\nCOVERING DEFICITS:")
 for i, deficit in deficits:
-    # ТОЧНА формула: дефицит / коефициент
+    # EXACT formula: deficit / odds
     hedge_amount = deficit / hedge_coefs[i]
 
     if hedge_amount <= remaining_excess:
         hedge_amounts[i] = hedge_amount
         remaining_excess -= hedge_amount
-        print(f"   {['1', 'X', '2'][i]}: {deficit:_.0f} лв / {hedge_coefs[i]:_.2f} = {hedge_amount:_.0f} лв")
+        print(f"   {['1', 'X', '2'][i]}: {deficit:_.0f} / {hedge_coefs[i]:_.2f} = {hedge_amount:_.0f}")
 
-# СТЪПКА 4: Разпределяне на оставащия излишък
-print(f"\n🔄 РАЗПРЕДЕЛЯНЕ НА ОСТАТЪКА:")
-print(f"   Оставащ излишък: {remaining_excess:_.0f} лв")
+# STEP 4: Distribute remaining excess
+print(f"\nDISTRIBUTING REMAINDER:")
+print(f"   Remaining excess: {remaining_excess:_.0f}")
 
 if remaining_excess > 0:
-    # Сума на коефициентите за двата други изхода
+    # Sum of odds for the two other outcomes
     other_outcomes = [i for i in range(3) if i != base_index]
     sum_other_coef = hedge_coefs[other_outcomes[0]] + hedge_coefs[other_outcomes[1]]
 
     base_amount = remaining_excess / sum_other_coef
 
-    print(f"   Базова стойност: {remaining_excess:_.0f} / {sum_other_coef:_.2f} = {base_amount:_.0f}лв")
+    print(f"   Base value: {remaining_excess:_.0f} / {sum_other_coef:_.2f} = {base_amount:_.0f}")
 
     for i in other_outcomes:
         other_coef = hedge_coefs[[x for x in other_outcomes if x != i][0]]
         additional_hedge = other_coef * base_amount
         hedge_amounts[i] += additional_hedge
-        print(f"   {['1', 'X', '2'][i]}: {other_coef:_.2f} × {base_amount:_.0f} = {additional_hedge:_.0f}лв")
+        print(f"   {['1', 'X', '2'][i]}: {other_coef:_.2f} × {base_amount:_.0f} = {additional_hedge:_.0f}")
 
-# СТЪПКА 5: ФИНАЛНИ РЕЗУЛТАТИ
-print(f"\n🎲 ФИНАЛНА СИМУЛАЦИЯ:")
+# STEP 5: FINAL RESULTS
+print(f"\nFINAL SIMULATION:")
 print("=" * 112)
 
 total_hedge = sum(hedge_amounts)
@@ -105,17 +105,17 @@ for i in range(3):
 
     margin = (result / total_income) * 100
 
-    print(f"🔮 {outcome}:")
-    print(f"   Каса: {final_cash:_.0f} лв")
+    print(f"SCENARIO {outcome}:")
+    print(f"   Cash: {final_cash:_.0f}")
     if hedge_income > 0:
-        print(f"   Хедж: +{hedge_income:_.0f} лв")
-    print(f"   Плащане: -{payout:_.0f} лв")
-    print(f"   РЕЗУЛТАТ: {result:_.0f} лв ({margin:+.1f} %)")
+        print(f"   Hedge: +{hedge_income:_.0f}")
+    print(f"   Payout: -{payout:_.0f}")
+    print(f"   RESULT: {result:_.0f} ({margin:+.1f} %)")
     print("-" * 40)
 
-print(f"\n📈 ОБЩА СТАТИСТИКА:")
-print(f"   Приход: {total_income:_.0f} лв")
-print(f"   Хедж: {total_hedge:_.0f} лв")
-print(f"   Каса: {final_cash:_.0f} лв")
-print(f"   Стратегия: {strategy_name}")
+print(f"\nOVERALL STATISTICS:")
+print(f"   Income: {total_income:_.0f}")
+print(f"   Hedge: {total_hedge:_.0f}")
+print(f"   Cash: {final_cash:_.0f}")
+print(f"   Strategy: {strategy_name}")
 print("=" * 112)
