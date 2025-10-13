@@ -1,7 +1,3 @@
-# Input data
-print("HEDGING SYSTEM - STATIC 80% CASH")
-print("=" * 112)
-
 coef = [float(x) for x in input("Enter odds (1 X 2): ").split()]
 bets = [float(x) for x in input("Enter bets (1 X 2): ").split()]
 
@@ -14,21 +10,18 @@ print(f"2: {bets[2]:_} at {coef[2]:_} → Payout: {bets[2] * coef[2]:_.0f}")
 print(f"Total income: {total_income:_}")
 print("=" * 112)
 
-# Hedging odds (2% discount)
 hedge_coefs = [coef[0] * 0.98, coef[1] * 0.98, coef[2] * 0.98]
 
 payouts = [bets[i] * coef[i] for i in range(3)]
 
-# STEP 1: STATIC 80% CASH
 cash = total_income * 0.80
 hedge_budget = total_income * 0.20
 
 print(f"STRATEGY: STATIC 80% CASH")
 print(f"\nBASE CASH:")
-print(f"   Cash: {cash:_.0f} (80% of income)")
-print(f"   Hedge budget: {hedge_budget:_.0f} (20% of income)")
+print(f"   Cash: {cash:_.0f} (80% от дохода)")
+print(f"   Hedge budget: {hedge_budget:_.0f} (20% от дохода)")
 
-# STEP 2: Calculate deficits
 deficits = []
 for i in range(3):
     deficit = payouts[i] - cash
@@ -38,7 +31,6 @@ print(f"\nDEFICITS:")
 for i, deficit in deficits:
     print(f"   {['1', 'X', '2'][i]}: {deficit:_.0f}")
 
-# STEP 3: COVERING DEFICITS
 hedge_amounts = [0, 0, 0]
 remaining_hedge = hedge_budget
 
@@ -46,33 +38,30 @@ print(f"\nCOVERING DEFICITS:")
 for i, deficit in deficits:
     if deficit > 0 and remaining_hedge > 0:
         hedge_amount = deficit / hedge_coefs[i]
-        # Take as much as we can from remaining budget
+
         actual_hedge = min(hedge_amount, remaining_hedge)
         hedge_amounts[i] = actual_hedge
         remaining_hedge -= actual_hedge
         print(f"   {['1', 'X', '2'][i]}: {deficit:_.0f} / {hedge_coefs[i]:_.2f} = {actual_hedge:_.0f}")
 
-# STEP 4: DISTRIBUTE REMAINDER INVERSELY PROPORTIONAL
 print(f"\nDISTRIBUTING REMAINDER (INVERSELY PROPORTIONAL):")
 print(f"   Remaining hedge budget: {remaining_hedge:_.0f}")
 
 if remaining_hedge > 0:
-    # Take INVERSE values of odds (reverse the order)
-    reverse_coefs = [coef[2], coef[1], coef[0]]  # [4, 3, 2] for odds [2, 3, 4]
 
-    # Sum of inverse values
+    reverse_coefs = [coef[2], coef[1], coef[0]]
+
     total_reverse = sum(reverse_coefs)
 
     print(f"   Inverse odds: {reverse_coefs[0]}, {reverse_coefs[1]}, {reverse_coefs[2]}")
     print(f"   Sum of inverse: {total_reverse:.1f}")
 
     for i in range(3):
-        # Inverse proportion applied in same order [1, X, 2]
         additional_hedge = (reverse_coefs[i] / total_reverse) * remaining_hedge
         hedge_amounts[i] += additional_hedge
-        print(f"   {['1', 'X', '2'][i]}: {reverse_coefs[i]:.1f}/{total_reverse:.1f} × {remaining_hedge:_.0f} = {additional_hedge:_.0f}")
+        print(
+            f"   {['1', 'X', '2'][i]}: {reverse_coefs[i]:.1f}/{total_reverse:.1f} × {remaining_hedge:_.0f} = {additional_hedge:_.0f}")
 
-# GUARANTEE that hedge is EXACTLY 20%
 total_hedge = sum(hedge_amounts)
 if abs(total_hedge - hedge_budget) > 1:
     print(f"\nCORRECTION: Hedge = {total_hedge:_.0f} → {hedge_budget:_.0f}")
@@ -81,11 +70,10 @@ if abs(total_hedge - hedge_budget) > 1:
         hedge_amounts[i] *= correction_factor
     total_hedge = sum(hedge_amounts)
 
-# STEP 5: FINAL RESULTS
 print(f"\nFINAL SIMULATION:")
 print("=" * 112)
 
-final_cash = cash  # Cash is ALWAYS 80% of income
+final_cash = cash
 
 print(f"REAL EXPENSES:")
 print(f"   Hedge budget: {hedge_budget:_.0f}")
