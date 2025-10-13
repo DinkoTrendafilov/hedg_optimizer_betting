@@ -1,7 +1,3 @@
-# Input data
-print("HEDGING SYSTEM - ADAPTIVE APPROACH")
-print("=" * 112)
-
 coef = [float(x) for x in input("Enter odds (1 X 2): ").split()]
 bets = [float(x) for x in input("Enter bets (1 X 2): ").split()]
 
@@ -14,25 +10,21 @@ print(f"2: {bets[2]:_} at {coef[2]:_} → Payout: {bets[2] * coef[2]:_.0f}")
 print(f"Total income: {total_income:_}")
 print("=" * 112)
 
-# Hedging odds (2% discount)
 hedge_coefs = [coef[0] * 0.98, coef[1] * 0.98, coef[2] * 0.98]
 
 payouts = [bets[i] * coef[i] for i in range(3)]
 
-# STEP 1: STRATEGY SELECTION
 max_coef = max(coef)
 min_payout = min(payouts)
 min_payout_index = payouts.index(min_payout)
 
 if max_coef >= 4:
-    # STRATEGY 1: Based on highest odds
     highest_coef_index = coef.index(max_coef)
     cash = payouts[highest_coef_index]
     strategy_name = "HIGH ODDS"
     base_index = highest_coef_index
     print(f"STRATEGY: HIGH ODDS ({max_coef} ≥ 4)")
 else:
-    # STRATEGY 2: Based on no clear favorite
     cash = min_payout
     strategy_name = "NO CLEAR FAVORITE"
     base_index = min_payout_index
@@ -45,7 +37,6 @@ print(f"   Strategy: {strategy_name}")
 print(f"   Base ({['1', 'X', '2'][base_index]}): {cash:_.0f}")
 print(f"   Excess: {excess:_.0f}")
 
-# STEP 2: Calculate deficits
 deficits = []
 for i in range(3):
     if i != base_index:
@@ -56,13 +47,11 @@ print(f"\nDEFICITS:")
 for i, deficit in deficits:
     print(f"   {['1', 'X', '2'][i]}: {deficit:_.0f}")
 
-# STEP 3: COVER DEFICITS WITH EXACT AMOUNTS
 hedge_amounts = [0, 0, 0]
 remaining_excess = excess
 
 print(f"\nCOVERING DEFICITS:")
 for i, deficit in deficits:
-    # EXACT formula: deficit / odds
     hedge_amount = deficit / hedge_coefs[i]
 
     if hedge_amount <= remaining_excess:
@@ -70,12 +59,10 @@ for i, deficit in deficits:
         remaining_excess -= hedge_amount
         print(f"   {['1', 'X', '2'][i]}: {deficit:_.0f} / {hedge_coefs[i]:_.2f} = {hedge_amount:_.0f}")
 
-# STEP 4: Distribute remaining excess
 print(f"\nDISTRIBUTING REMAINDER:")
 print(f"   Remaining excess: {remaining_excess:_.0f}")
 
-if remaining_excess > 0:
-    # Sum of odds for the two other outcomes
+if remaining_excess > 0:    
     other_outcomes = [i for i in range(3) if i != base_index]
     sum_other_coef = hedge_coefs[other_outcomes[0]] + hedge_coefs[other_outcomes[1]]
 
@@ -89,7 +76,6 @@ if remaining_excess > 0:
         hedge_amounts[i] += additional_hedge
         print(f"   {['1', 'X', '2'][i]}: {other_coef:_.2f} × {base_amount:_.0f} = {additional_hedge:_.0f}")
 
-# STEP 5: FINAL RESULTS
 print(f"\nFINAL SIMULATION:")
 print("=" * 112)
 
